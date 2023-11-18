@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {LoggingInterceptor} from '../../interceptors/logging.interceptor'
 import { ClassInterceptor } from 'src/interceptors/class.interceptor';
-
+import { FindOneDto } from 'src/modules/user/dto/FindOne.dto';
 
 @Controller('user')
 export class UserController {
@@ -24,7 +24,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @UseInterceptors(ClassInterceptor)
+  @UseInterceptors(new ClassInterceptor(FindOneDto))
   @Get(':id')
   findOne(@Param('id') id: string) {
     return {

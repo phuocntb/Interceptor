@@ -2,10 +2,15 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nes
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { FindOneDto } from 'src/modules/user/dto/FindOne.dto';
+
 @Injectable()
 export class ClassInterceptor implements NestInterceptor {
+
+    constructor(private dto: any) {}
+
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+
+        const req = context.switchToHttp().getRequest();
 
         console.log("da vao")
 
@@ -13,10 +18,11 @@ export class ClassInterceptor implements NestInterceptor {
             .handle()
             .pipe(
                 tap(() => {
+                    // thực hiện gì đó mà không tác động gì vào response
                 }),
                 map((data) => {
-
-                    data = plainToInstance(FindOneDto, data, {
+                    // bắt data xử lý
+                    data = plainToInstance(this.dto, data, {
                         excludeExtraneousValues: true
                     })
 
